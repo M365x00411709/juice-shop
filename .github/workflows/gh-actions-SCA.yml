@@ -38,5 +38,16 @@ jobs:
              -F 'projectname=DevSecOps' \
              -F 'bom=@${{ github.workspace }}/bom.xml'
       continue-on-error: true
+    - name: Upload BOM to existing Dependency-Track project
+      env:
+        DTRACK_URL: "https://dependency-track-devsecops-${{ secrets.LABINSTANCEID }}"
+        DTRACK_API_KEY: ${{ secrets.DTRACKAPIKEY }}
+        DTRACK_PROJECT_UUID: ${{ secrets.DTRACKPROJID }}
+      run: |
+        curl --fail --show-error --silent \
+          -X POST "${DTRACK_URL}/api/v1/bom" \
+          -H "X-API-Key: ${DTRACK_API_KEY}" \
+          -F "project=${DTRACK_PROJECT_UUID}" \
+          -F "bom=@target/bom.xml"  
 
                     
