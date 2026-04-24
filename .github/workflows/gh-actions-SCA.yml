@@ -29,6 +29,27 @@ jobs:
         npm install -g @cyclonedx/cyclonedx-npm@latest
         npm run sbom
       shell: bash
+    - name: Generate CycloneDX BOM
+      run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:2.7.11:makeAggregateBom
+
+    - name: Verify BOM file exists
+      run: |
+        pwd
+        find . -name "bom.xml" -o -name "*.cdx.xml"
+        test -f target/bom.xml
+
+    - name: Upload BOM to Dependency-Track
+      env:
+        DTRACK_URL: "https://dependency-track-devsecops-${{ secrets.LABINSTANCEID }}"
+        DTRACK_API_KEY: ${{ secrets.DTRACKAPIKEY }}
+      run: |
+        curl --fail --show-error --silent \
+          -X POST "${DTRACK_URL}/api/v1/bom" \
+          -H "X-API-Key: ${DTRACK_API_KEY}" \
+          -F "projectName=DevSecOps" \
+          -F "projectVersion=1.0.0" \
+          -F "autoCreate=true" \
+          -F "bom=@target/bom.xml"
     - name: Upload BOM to Dependency-Track
       run: |
         curl -v -X "POST" "https://dependency-track-devsecops-${{ secrets.LABINSTANCEID }}.azurewebsites.net/api/v1/bom" \
