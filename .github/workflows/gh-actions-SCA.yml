@@ -28,10 +28,7 @@ jobs:
       run: |
         npm install -g @cyclonedx/cyclonedx-npm@latest
         npm run sbom
-      shell: bash
-    - name: Generate CycloneDX BOM
-      run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:2.7.11:makeAggregateBom
-
+      shell: bash    
     - name: Verify BOM file exists
       run: |
         pwd
