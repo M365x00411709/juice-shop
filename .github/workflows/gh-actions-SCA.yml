@@ -42,7 +42,7 @@ jobs:
           -F "projectName=DevSecOps" \
           -F "projectVersion=1.0.0" \
           -F "autoCreate=true" \
-          -F "bom=@target/bom.xml"
+          -F "bom=@${{ github.workspace }}/bom.json"
     - name: Upload BOM to Dependency-Track
       run: |
         curl -v -X "POST" "https://dependency-track-devsecops-${{ secrets.LABINSTANCEID }}.azurewebsites.net/api/v1/bom" \
@@ -50,7 +50,7 @@ jobs:
              -H 'X-API-Key: ${{ secrets.DTRACKAPIKEY }}' \
              -F 'project=${{ secrets.DTRACKPROJID }}' \
              -F 'projectname=DevSecOps' \
-             -F 'bom=@${{ github.workspace }}/bom.xml'
+             -F 'bom=@${{ github.workspace }}/bom.json'
       continue-on-error: true
     - name: Upload BOM to existing Dependency-Track project
       env:
