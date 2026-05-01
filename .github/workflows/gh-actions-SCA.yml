@@ -31,7 +31,7 @@ jobs:
       shell: bash    
     
     - name: Upload BOM artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: bom
         path: ${{ github.workspace }}/bom.json
