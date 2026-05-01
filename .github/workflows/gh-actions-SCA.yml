@@ -30,7 +30,11 @@ jobs:
         npm run sbom
       shell: bash    
     
-
+    - name: Upload BOM artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bom
+        path: ${{ github.workspace }}/bom.json
    
     - name: Upload BOM to Dependency-Track
       run: |
